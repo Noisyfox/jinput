@@ -69,7 +69,6 @@
 			<srcfile/>
 			<arg value="-output"/>
 			<arg path="libjinput-osx.jnilib"/>
-			<fileset file="ppc/libjinput-osx-ppc.jnilib"/>
 			<fileset file="i386/libjinput-osx-i386.jnilib"/>
 			<fileset file="x86_64/libjinput-osx-x86_64.jnilib"/>
 		</apply>
