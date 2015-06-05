@@ -5,6 +5,7 @@
     <property name="build" location="classes"/>
     <property name="bin" location="bin" />
     <property name="plugins" location="plugins" />
+		<property name="java.minimum.specification.version" value="1.6" />
     
     <target name="init">
 		<mkdir dir="${build}"/>
@@ -18,7 +19,7 @@
     </target>
 
     <target depends="init" name="compile">
-        <javac debug="true" deprecation="true" destdir="${build}" source="1.4" srcdir="src/main/java">
+        <javac includeantruntime="false" debug="true" deprecation="true" destdir="${build}" source="${java.minimum.specification.version}" srcdir="src/main/java">
             <classpath>
                 <pathelement location="../../coreAPI/bin/jinput-core.jar"/>
                 <pathelement location="../../lib/jutils.jar"/>
@@ -39,7 +40,7 @@
         <mkdir dir="apidocs"/>
         <javadoc packagenames="net.java.games.input.*" 
                  destdir="apidocs"
-                 additionalparam="-source 1.4"
+                 additionalparam="-source ${java.minimum.specification.version}"
                  link="../../../coreAPI/apidocs">
             <sourcepath>
                 <pathelement location="src/main/java"/>

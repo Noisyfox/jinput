@@ -11,3 +11,5 @@ eclipse_bin/
 .idea
 *.iml
 *~
+*.o
+*.jnilib
