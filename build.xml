@@ -29,7 +29,7 @@
 		
 		<delete file="lib/jutils.jar"/>
 		<copy tofile="lib/jutils.jar">
-			<fileset dir="lib" includes="jutils-*-SNAPSHOT.jar"></fileset>
+			<fileset dir="lib" includes="jutils-*.jar"></fileset>
 		</copy>
 	</target>
 

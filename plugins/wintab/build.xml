@@ -9,11 +9,11 @@
     </target>
 
     <target name="compile" depends="init">
-        <javac srcdir="../windows/src/java" destdir="classes" debug="true" deprecation="true" source="1.4" target="1.4">
+	    <javac srcdir="../windows/src/main/java" destdir="classes" debug="true" deprecation="true" source="1.4" target="1.4">
         	<include name="**/DummyWindow.java"/>
 		</javac>
 
-    	<javac srcdir="src/java" destdir="classes" debug="true" deprecation="true" source="1.4" target="1.4">
+    	<javac srcdir="src/main/java" destdir="classes" debug="true" deprecation="true" source="1.4" target="1.4">
             <!-- To add something to the classpath: -->
             <classpath>
 				<pathelement location="../../coreAPI/bin/jinput-core.jar"/>
@@ -23,7 +23,7 @@
 	</target>
 
     <target depends="init,compile" name="create_jniheaders">
-		<javah destdir="src/native">
+		<javah destdir="src/main/native">
             <classpath>
                 <pathelement path="classes"/>
                 <pathelement location="../../coreAPI/classes"/>
@@ -36,7 +36,7 @@
 	</target>
 
     <target name="compile_native" depends="init,create_jniheaders" if="wintab">
-        <ant dir="src/native" target="compile"/>
+        <ant dir="src/main/native" target="compile"/>
 		<copy todir="bin">
 			<fileset dir="src/native" includes="*.dll"/>
 		</copy>
@@ -57,10 +57,10 @@
                  destdir="apidocs"
                  additionalparam="-source 1.4">
             <sourcepath>
-                <pathelement location="src/java"/>
+                <pathelement location="src/main/java"/>
             </sourcepath>
              <classpath>
-                <pathelement location="../windows/src/java"/>
+                <pathelement location="../windows/src/main/java"/>
 				 <pathelement location="../../bin/jinput-core.jar"/>
 				<pathelement location="../../lib/jutils.jar"/>
             </classpath>
@@ -71,6 +71,6 @@
 		<delete dir="classes" failonerror="no"/>
 		<delete dir="bin" failonerror="no"/>
 		<delete dir="apidocs" failonerror="no"/>
-		<ant inheritAll="false" antfile="src/native/build.xml" target="clean"/>
+		<ant inheritAll="false" antfile="src/main/native/build.xml" target="clean"/>
     </target>
 </project>

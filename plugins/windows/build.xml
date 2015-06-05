@@ -9,7 +9,7 @@
     </target>
 
     <target name="compile" depends="init">
-        <javac srcdir="src/java" destdir="classes" debug="true" deprecation="true" source="1.4" target="1.4">
+	    <javac srcdir="src/main/java" destdir="classes" debug="true" deprecation="true" source="1.4" target="1.4">
             <!-- To add something to the classpath: -->
             <classpath>
 				<pathelement location="../../coreAPI/bin/jinput-core.jar"/>
@@ -19,7 +19,7 @@
 	</target>
 
     <target depends="init,compile" name="create_jniheaders">
-		<javah destdir="src/native/dx8">
+	    <javah destdir="src/main/native/dx8">
             <classpath>
                 <pathelement path="classes"/>
                 <pathelement location="../../coreAPI/classes"/>
@@ -28,14 +28,14 @@
 			<class name="net.java.games.input.IDirectInputDevice"/>
 			<class name="net.java.games.input.IDirectInputEffect"/>
 		</javah>
-		<javah destdir="src/native">
+		<javah destdir="src/main/native">
             <classpath>
                 <pathelement path="classes"/>
                 <pathelement location="../../coreAPI/classes"/>
             </classpath>
 			<class name="net.java.games.input.DummyWindow"/>
 		</javah>
-		<javah destdir="src/native/raw">
+		<javah destdir="src/main/native/raw">
             <classpath>
                 <pathelement path="classes"/>
 				<pathelement location="../../coreAPI/bin/jinput-core.jar"/>
@@ -47,9 +47,9 @@
 	</target>
 
     <target name="compile_native" depends="init,create_jniheaders" if="dx8">
-        <ant dir="src/native" target="compile"/>
+        <ant dir="src/main/native" target="compile"/>
 		<copy todir="bin">
-			<fileset dir="src/native" includes="*.dll"/>
+			<fileset dir="src/main/native" includes="*.dll"/>
 		</copy>
     </target>
 
@@ -68,7 +68,7 @@
                  destdir="apidocs"
                  additionalparam="-source 1.4">
             <sourcepath>
-                <pathelement location="src/java"/>
+                <pathelement location="src/main/java"/>
             </sourcepath>
              <classpath>
 				 <pathelement location="../../bin/jinput-core.jar"/>
@@ -81,6 +81,6 @@
 		<delete dir="classes" failonerror="no"/>
 		<delete dir="bin" failonerror="no"/>
 		<delete dir="apidocs" failonerror="no"/>
-		<ant inheritAll="false" antfile="src/native/build.xml" target="clean"/>
+		<ant inheritAll="false" antfile="src/main/native/build.xml" target="clean"/>
     </target>
 </project>

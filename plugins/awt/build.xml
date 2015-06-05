@@ -7,7 +7,7 @@
     </target>
 
     <target depends="init" name="compile">
-        <javac debug="true" deprecation="true" destdir="classes" source="1.4" target="1.4" srcdir="src">
+        <javac debug="true" deprecation="true" destdir="classes" source="1.4" target="1.4" srcdir="src/main/java">
             <classpath>
                 <pathelement location="../../coreAPI/bin/jinput-core.jar"/>
                 <pathelement location="../../lib/jutils.jar"/>
@@ -31,7 +31,7 @@
                  additionalparam="-source 1.4"
                  link="../../../coreAPI/apidocs">
             <sourcepath>
-                <pathelement location="src"/>
+                <pathelement location="src/main/java"/>
             </sourcepath>
              <classpath>
                 <pathelement location="../../coreAPI/bin/jinput-core.jar"/>

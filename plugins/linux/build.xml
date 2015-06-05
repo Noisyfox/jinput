@@ -12,7 +12,7 @@
 
     <target depends="init" name="compile">
 		<!--		<ant dir="src/native" target="createNativeDefinitions.java"/>-->
-        <javac debug="true" deprecation="true" destdir="classes" source="1.4" target="1.4" srcdir="src/java">
+		<javac debug="true" deprecation="true" destdir="classes" source="1.4" target="1.4" srcdir="src/main/java">
             <classpath>
 				<pathelement location="../../coreAPI/bin/jinput-core.jar"/>
                 <pathelement location="../../lib/jutils.jar"/>
@@ -36,7 +36,7 @@
                  additionalparam="-source 1.4"
                  link="../../../coreAPI/apidocs">
             <sourcepath>
-                <pathelement location="src/java"/>
+                <pathelement location="src/main/java"/>
             </sourcepath>
              <classpath>
                 <pathelement location="../../coreAPI/bin/jinput-core.jar"/>
@@ -49,11 +49,11 @@
 		<delete dir="classes" failonerror="no"/>
 		<delete dir="bin" failonerror="no"/>
         <delete dir="apidocs" failonerror="no"/>
-		<ant inheritAll="false" antfile="src/native/build.xml" target="clean"/>
+		<ant inheritAll="false" antfile="src/main/c/build.xml" target="clean"/>
     </target>
 
     <target depends="init,compile" name="createJNIHeaders">
-		<javah destdir="src/native">
+		<javah destdir="src/main/c">
             <classpath>
                 <pathelement location="classes"/>
                 <pathelement location="../../coreAPI/bin/jinput-core.jar"/>
@@ -64,9 +64,9 @@
     </target>
     
     <target depends="init,createJNIHeaders" name="compileNativeJinputLib" if="linux">
-        <ant dir="src/native" target="compileNativeJinputLib"/>
+        <ant dir="src/main/c" target="compileNativeJinputLib"/>
         <copy todir="bin">
- 	       <fileset dir="src/native" includes="libjinput-linux*.so"/>
+ 	       <fileset dir="src/main/c" includes="libjinput-linux*.so"/>
 	   </copy>
     </target>
 </project>
