@@ -1,3 +1,12 @@
+I modified the project so that it could be imported into Idea using Maven,
+and build easily with ant.
+
+                                       by Noisyfox
+
+---------------------------------------------------------------------------
+The original README.txt:
+---------------------------------------------------------------------------
+
 Project: net.java.games.*
 Purpose: Open source game libraries
 Authors:
