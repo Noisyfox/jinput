@@ -11,6 +11,7 @@
 #include <jni.h>
 #include "net_java_games_input_RawDevice.h"
 #include "util.h"
+#include "string_util.h"
 
 JNIEXPORT jstring JNICALL Java_net_java_games_input_RawDevice_nGetName(JNIEnv *env, jclass unused, jlong handle_addr) {
 	HANDLE handle = (HANDLE)(INT_PTR)handle_addr;
@@ -18,6 +19,7 @@ JNIEXPORT jstring JNICALL Java_net_java_games_input_RawDevice_nGetName(JNIEnv *e
 	UINT name_length;
 	char *name;
 	jstring name_str;
+	char utf8_buf[1024];
 
 	res = GetRawInputDeviceInfo(handle, RIDI_DEVICENAME, NULL, &name_length);
 	name = (char *)malloc(name_length*sizeof(char));
@@ -27,7 +29,9 @@ JNIEXPORT jstring JNICALL Java_net_java_games_input_RawDevice_nGetName(JNIEnv *e
 		throwIOException(env, "Failed to get device name (%d)\n", GetLastError());
 		return NULL;
 	}
-	name_str = (*env)->NewStringUTF(env, name);
+	utf8_buf[0] = '\0';
+	ConvertAnsiToUtf8(name, utf8_buf);
+	name_str = (*env)->NewStringUTF(env, utf8_buf);
 	free(name);
 	return name_str;
 }

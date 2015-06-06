@@ -14,6 +14,7 @@
 #include "net_java_games_input_RawInputEnvironmentPlugin.h"
 #include "util.h"
 #include "winutil.h"
+#include "string_util.h"
 
 JNIEXPORT jbyteArray JNICALL Java_net_java_games_input_RawInputEnvironmentPlugin_getKeyboardClassGUID(JNIEnv *env, jclass unused) {
 	return wrapGUID(env, &GUID_DEVCLASS_KEYBOARD);
@@ -60,7 +61,7 @@ JNIEXPORT void JNICALL Java_net_java_games_input_RawInputEnvironmentPlugin_nEnum
 		DWORD DataT;
 		LPTSTR buffer = NULL;
 		DWORD buffersize = 0;
-
+		char utf8_buf[1024];
 
 		while (!SetupDiGetDeviceRegistryProperty(
 					hDevInfo,
@@ -81,7 +82,9 @@ JNIEXPORT void JNICALL Java_net_java_games_input_RawInputEnvironmentPlugin_nEnum
 			}
 		}
 
-		device_name = (*env)->NewStringUTF(env, buffer);
+		utf8_buf[0] = '\0';
+		ConvertAnsiToUtf8(buffer, utf8_buf);
+		device_name = (*env)->NewStringUTF(env, utf8_buf);
 		if (device_name == NULL) {
 			free(buffer);
 			SetupDiDestroyDeviceInfoList(hDevInfo);
@@ -106,9 +109,13 @@ JNIEXPORT void JNICALL Java_net_java_games_input_RawInputEnvironmentPlugin_nEnum
 			}
 		}
 
-		device_instance_id = (*env)->NewStringUTF(env, buffer);
-		if (buffer != NULL)
+		device_instance_id = NULL;
+		if (buffer != NULL){
+			utf8_buf[0] = '\0';
+			ConvertAnsiToUtf8(buffer, utf8_buf);
+			device_instance_id = (*env)->NewStringUTF(env, utf8_buf);
 			free(buffer);
+		}
 		if (device_instance_id == NULL) {
 			SetupDiDestroyDeviceInfoList(hDevInfo);
 			return;
