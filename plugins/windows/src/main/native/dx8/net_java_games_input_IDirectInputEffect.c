@@ -5,6 +5,9 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
+#define UNICODE
+#define _UNICODE
+
 #include <windows.h>
 #include "dxversion.h"
 #include <jni.h>

@@ -5,6 +5,9 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
+#define UNICODE
+#define _UNICODE
+
 #include <windows.h>
 #include <jni.h>
 #include "dxversion.h"
@@ -12,6 +15,7 @@
 #include "net_java_games_input_IDirectInput.h"
 #include "util.h"
 #include "winutil.h"
+#include "string_util.h"
 
 typedef struct {
     LPDIRECTINPUT8 lpDirectInput;
@@ -43,6 +47,7 @@ static BOOL CALLBACK enumerateDevicesCallback(LPCDIDEVICEINSTANCE lpddi, LPVOID 
 	jstring product_name;
 	jbyteArray instance_guid;
 	jbyteArray product_guid;
+	char utf8_buf[1024];
 
 	instance_guid = wrapGUID(enum_context->env, &(lpddi->guidInstance));
 	if (instance_guid == NULL)
@@ -50,10 +55,14 @@ static BOOL CALLBACK enumerateDevicesCallback(LPCDIDEVICEINSTANCE lpddi, LPVOID 
 	product_guid = wrapGUID(enum_context->env, &(lpddi->guidProduct));
 	if (product_guid == NULL)
 		return DIENUM_STOP;
-	instance_name = (*enum_context->env)->NewStringUTF(enum_context->env, lpddi->tszInstanceName);
+	utf8_buf[0] = '\0';
+	UTF16Str_To_UTF8Str(lpddi->tszInstanceName, utf8_buf);
+	instance_name = (*enum_context->env)->NewStringUTF(enum_context->env, utf8_buf);
 	if (instance_name == NULL)
 		return DIENUM_STOP;
-	product_name = (*enum_context->env)->NewStringUTF(enum_context->env, lpddi->tszProductName);
+	utf8_buf[0] = '\0';
+	UTF16Str_To_UTF8Str(lpddi->tszProductName, utf8_buf);
+	product_name = (*enum_context->env)->NewStringUTF(enum_context->env, utf8_buf);
 	if (product_name == NULL)
 		return DIENUM_STOP;
 	

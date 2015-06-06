@@ -5,6 +5,9 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
+#define UNICODE
+#define _UNICODE
+
 #include <windows.h>
 #include "dxversion.h"
 #include <jni.h>
@@ -12,6 +15,7 @@
 #include "net_java_games_input_IDirectInputDevice.h"
 #include "util.h"
 #include "winutil.h"
+#include "string_util.h"
 
 typedef struct {
 	JNIEnv *env;
@@ -90,6 +94,7 @@ static BOOL CALLBACK enumEffectsCallback(LPCDIEFFECTINFO pdei, LPVOID pvRef) {
 	jobject device_obj = enum_context->device_obj;
 	jint guid_id;
 	jclass obj_class = (*env)->GetObjectClass(env, device_obj);
+	char utf8_buf[1024];
 
 	
 	if (obj_class == NULL)
@@ -100,7 +105,9 @@ static BOOL CALLBACK enumEffectsCallback(LPCDIEFFECTINFO pdei, LPVOID pvRef) {
 	add_method = (*env)->GetMethodID(env, obj_class, "addEffect", "([BIIIILjava/lang/String;)V");
 	if (add_method == NULL)
 		return DIENUM_STOP;
-	name = (*env)->NewStringUTF(env, pdei->tszName);
+	utf8_buf[0] = '\0';
+	UTF16Str_To_UTF8Str(pdei->tszName, utf8_buf);
+	name = (*env)->NewStringUTF(env, utf8_buf);
 	if (name == NULL)
 		return DIENUM_STOP;
 	guid_id = mapGUIDType(&(pdei->guid));
@@ -122,6 +129,7 @@ static BOOL CALLBACK enumObjectsCallback(LPCDIDEVICEOBJECTINSTANCE lpddoi, LPVOI
 	JNIEnv *env = enum_context->env;
 	jobject device_obj = enum_context->device_obj;
 	jclass obj_class = (*env)->GetObjectClass(env, device_obj);
+	char utf8_buf[1024];
 	
 	if (obj_class == NULL)
 		return DIENUM_STOP;
@@ -131,7 +139,9 @@ static BOOL CALLBACK enumObjectsCallback(LPCDIDEVICEOBJECTINSTANCE lpddoi, LPVOI
 	add_method = (*env)->GetMethodID(env, obj_class, "addObject", "([BIIIIILjava/lang/String;)V");
 	if (add_method == NULL)
 		return DIENUM_STOP;
-	name = (*env)->NewStringUTF(env, lpddoi->tszName);
+	utf8_buf[0] = '\0';
+	UTF16Str_To_UTF8Str(lpddoi->tszName, utf8_buf);
+	name = (*env)->NewStringUTF(env, utf8_buf);
 	if (name == NULL)
 		return DIENUM_STOP;
 	instance = DIDFT_GETINSTANCE(lpddoi->dwType);
