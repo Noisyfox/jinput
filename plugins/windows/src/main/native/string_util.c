@@ -4,7 +4,7 @@
 内码转换
 ------------------------------------------------------------- */
 
-void Convert(const char* strIn, char* strOut, int sourceCodepage, int targetCodepage)
+void Convert(const char* strIn, char* strOut, int maxLength, int sourceCodepage, int targetCodepage)
 {
 	int unicodeLen = MultiByteToWideChar(sourceCodepage, 0, strIn, -1, NULL, 0);
 	wchar_t* pUnicode;
@@ -18,20 +18,20 @@ void Convert(const char* strIn, char* strOut, int sourceCodepage, int targetCode
 	memset(pTargetData, 0, targetLen + 1);
 	WideCharToMultiByte(targetCodepage, 0, (LPWSTR)pUnicode, -1, (char *)pTargetData, targetLen, NULL, NULL);
 
-	lstrcpy(strOut, (char*)pTargetData);
+	lstrcpyn(strOut, (char*)pTargetData, maxLength);
 
 	free(pUnicode);
 	free(pTargetData);
 }
 
 // Ansi 转 utf-8
-void ConvertAnsiToUtf8(const char* strIn, char* strOut)
+void ConvertAnsiToUtf8(const char* strIn, char* strOut, int maxLength)
 {
-	Convert(strIn, strOut, CP_ACP, CP_UTF8);
+	Convert(strIn, strOut, maxLength, CP_ACP, CP_UTF8);
 }
 
 // utf-8 转 Ansi
-void ConvertUtf8ToAnsi(const char* strIn, char* strOut)
+void ConvertUtf8ToAnsi(const char* strIn, char* strOut, int maxLength)
 {
-	Convert(strIn, strOut, CP_UTF8, CP_ACP);
+	Convert(strIn, strOut, maxLength, CP_UTF8, CP_ACP);
 }

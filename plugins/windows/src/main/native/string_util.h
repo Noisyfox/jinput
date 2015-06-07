@@ -8,9 +8,9 @@
 ------------------------------------------------------------- */
 
 // Ansi 转 utf-8
-void ConvertAnsiToUtf8(const char* strIn, char* strOut);
+void ConvertAnsiToUtf8(const char* strIn, char* strOut, int maxLength);
 
 // utf-8 转 Ansi
-void ConvertUtf8ToAnsi(const char* strIn, char* strOut);
+void ConvertUtf8ToAnsi(const char* strIn, char* strOut, int maxLength);
 
 #endif

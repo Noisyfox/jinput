@@ -83,7 +83,7 @@ JNIEXPORT void JNICALL Java_net_java_games_input_RawInputEnvironmentPlugin_nEnum
 		}
 
 		utf8_buf[0] = '\0';
-		ConvertAnsiToUtf8(buffer, utf8_buf);
+		ConvertAnsiToUtf8(buffer, utf8_buf, sizeof(utf8_buf)/sizeof(char));
 		device_name = (*env)->NewStringUTF(env, utf8_buf);
 		if (device_name == NULL) {
 			free(buffer);
@@ -112,7 +112,7 @@ JNIEXPORT void JNICALL Java_net_java_games_input_RawInputEnvironmentPlugin_nEnum
 		device_instance_id = NULL;
 		if (buffer != NULL){
 			utf8_buf[0] = '\0';
-			ConvertAnsiToUtf8(buffer, utf8_buf);
+			ConvertAnsiToUtf8(buffer, utf8_buf, sizeof(utf8_buf)/sizeof(char));
 			device_instance_id = (*env)->NewStringUTF(env, utf8_buf);
 			free(buffer);
 		}

@@ -103,7 +103,7 @@ static BOOL CALLBACK enumEffectsCallback(LPCDIEFFECTINFO pdei, LPVOID pvRef) {
 	if (add_method == NULL)
 		return DIENUM_STOP;
 	utf8_buf[0] = '\0';
-	ConvertAnsiToUtf8(pdei->tszName, utf8_buf);
+	ConvertAnsiToUtf8(pdei->tszName, utf8_buf, sizeof(utf8_buf)/sizeof(char));
 	name = (*env)->NewStringUTF(env, utf8_buf);
 	if (name == NULL)
 		return DIENUM_STOP;
@@ -137,7 +137,7 @@ static BOOL CALLBACK enumObjectsCallback(LPCDIDEVICEOBJECTINSTANCE lpddoi, LPVOI
 	if (add_method == NULL)
 		return DIENUM_STOP;
 	utf8_buf[0] = '\0';
-	ConvertAnsiToUtf8(lpddoi->tszName, utf8_buf);
+	ConvertAnsiToUtf8(lpddoi->tszName, utf8_buf, sizeof(utf8_buf)/sizeof(char));
 	name = (*env)->NewStringUTF(env, utf8_buf);
 	if (name == NULL)
 		return DIENUM_STOP;

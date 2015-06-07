@@ -30,7 +30,7 @@ JNIEXPORT jstring JNICALL Java_net_java_games_input_RawDevice_nGetName(JNIEnv *e
 		return NULL;
 	}
 	utf8_buf[0] = '\0';
-	ConvertAnsiToUtf8(name, utf8_buf);
+	ConvertAnsiToUtf8(name, utf8_buf, sizeof(utf8_buf)/sizeof(char));
 	name_str = (*env)->NewStringUTF(env, utf8_buf);
 	free(name);
 	return name_str;

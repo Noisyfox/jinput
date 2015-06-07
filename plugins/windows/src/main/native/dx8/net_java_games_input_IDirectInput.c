@@ -53,12 +53,12 @@ static BOOL CALLBACK enumerateDevicesCallback(LPCDIDEVICEINSTANCE lpddi, LPVOID 
 	if (product_guid == NULL)
 		return DIENUM_STOP;
 	utf8_buf[0] = '\0';
-	ConvertAnsiToUtf8(lpddi->tszInstanceName, utf8_buf);
+	ConvertAnsiToUtf8(lpddi->tszInstanceName, utf8_buf, sizeof(utf8_buf)/sizeof(char));
 	instance_name = (*enum_context->env)->NewStringUTF(enum_context->env, utf8_buf);
 	if (instance_name == NULL)
 		return DIENUM_STOP;
 	utf8_buf[0] = '\0';
-	ConvertAnsiToUtf8(lpddi->tszProductName, utf8_buf);
+	ConvertAnsiToUtf8(lpddi->tszProductName, utf8_buf, sizeof(utf8_buf)/sizeof(char));
 	product_name = (*enum_context->env)->NewStringUTF(enum_context->env, utf8_buf);
 	if (product_name == NULL)
 		return DIENUM_STOP;
