@@ -25,7 +25,7 @@
  * ANY IMPLIED WARRANT OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE OR
  * NON-INFRINGEMEN, ARE HEREBY EXCLUDED.  SUN MICROSYSTEMS, INC. ("SUN") AND
  * ITS LICENSORS SHALL NOT BE LIABLE FOR ANY DAMAGES SUFFERED BY LICENSEE AS
- * A RESULT OF USING, MODIFYING OR DESTRIBUTING THIS SOFTWARE OR ITS 
+ * A RESULT OF USING, MODIFYING OR DESTRIBUTING THIS SOFTWARE OR ITS
  * DERIVATIVES.  IN NO EVENT WILL SUN OR ITS LICENSORS BE LIABLE FOR ANY LOST
  * REVENUE, PROFIT OR DATA, OR FOR DIRECT, INDIRECT, SPECIAL, CONSEQUENTIAL,
  * INCIDENTAL OR PUNITIVE DAMAGES.  HOWEVER CAUSED AND REGARDLESS OF THE THEORY
@@ -185,13 +185,13 @@ final class IDirectInputDevice {
 	public final static int DIEP_NORESTART			  = 0x40000000;
 	public final static int DIEP_NODOWNLOAD			 = 0x80000000;
 	public final static int DIEB_NOTRIGGER			= 0xFFFFFFFF;
-	
+
 	public final static int INFINITE				= 0xFFFFFFFF;
 
 	public final static int DI_DEGREES				  = 100;
 	public final static int DI_FFNOMINALMAX			 = 10000;
 	public final static int DI_SECONDS				  = 1000000;
-	
+
 	public final static int DIPROPRANGE_NOMIN = 0x80000000;
 	public final static int DIPROPRANGE_NOMAX = 0x7FFFFFFF;
 
@@ -348,7 +348,7 @@ final class IDirectInputDevice {
 		data.set(next_event);
 		return true;
 	}
-	
+
 	private final void poll() throws IOException {
 		int res = nPoll(address);
 		if (res != DI_OK && res != DI_NOEFFECT) {
@@ -387,7 +387,7 @@ final class IDirectInputDevice {
 		return true;
 	}
 	private final static native int nGetDeviceData(long address, int flags, DataQueue queue, Object[] queue_elements, int position, int remaining);
-	
+
 	private final void getDeviceState(int[] device_state) throws IOException {
 		int res = nGetDeviceState(address, device_state);
 		if (res != DI_OK) {
@@ -411,7 +411,7 @@ final class IDirectInputDevice {
 			throw new IOException("Failed to set data format (" + Integer.toHexString(res) + ")");
 	}
 	private final static native int nSetDataFormat(long address, int flags, DIDeviceObject[] device_objects);
-	
+
 	public final String getProductName() {
 		return product_name;
 	}
@@ -430,7 +430,7 @@ final class IDirectInputDevice {
 			throw new IOException("Failed to enumerate effects (" + Integer.toHexString(res) + ")");
 	}
 	private final native int nEnumEffects(long address, int flags);
-	
+
 	/* Called from native side from nEnumEffects */
 	private final void addEffect(byte[] guid, int guid_id, int effect_type, int static_params, int dynamic_params, String name) {
 		effects.add(new DIEffectInfo(this, guid, guid_id, effect_type, static_params, dynamic_params, name));
@@ -461,6 +461,14 @@ final class IDirectInputDevice {
 
 	/* Called from native side from nEnumObjects */
 	private final void addObject(byte[] guid, int guid_type, int identifier, int type, int instance, int flags, String name) throws IOException {
+        if((type & IDirectInputDevice.DIDFT_AXIS) != 0) {
+            for (Object alreadyObjs : objects) {
+                DIDeviceObject o = (DIDeviceObject) alreadyObjs;
+                if (o.getGUIDType() == guid_type) {
+                    return; // usually we can't have two same axis on one single device
+                }
+            }
+        }
 		Component.Identifier id = getIdentifier(guid_type, type, instance);
 		int format_offset = current_format_offset++;
 		DIDeviceObject obj = new DIDeviceObject(this, id, guid, guid_type, identifier, type, instance, flags, name, format_offset);
@@ -475,7 +483,7 @@ final class IDirectInputDevice {
 		int button_id = button_counter++;
 		return DIIdentifierMap.getButtonIdentifier(button_id);
 	}
-	
+
 	private final Component.Identifier getIdentifier(int guid_type, int type, int instance) {
 		switch (guid_type) {
 			case IDirectInputDevice.GUID_XAxis:
@@ -502,7 +510,7 @@ final class IDirectInputDevice {
 				return Component.Identifier.Axis.UNKNOWN;
 		}
 	}
-	
+
 	public final synchronized void setBufferSize(int size) throws IOException {
 		checkReleased();
 		unacquire();
